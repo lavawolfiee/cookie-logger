@@ -1,3 +1,5 @@
+# Cookie logger🍪
+
 HTTP server to log users' cookies when exploiting XSS.
 
 To log cookies, simply send GET request to `/log?data={cookies}&url={url}`. Cookies will be logged to stdout and stored in `cookies.log` file. 
